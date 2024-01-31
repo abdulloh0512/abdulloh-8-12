@@ -1,7 +1,8 @@
 "use client";
 
 import * as z from "zod";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
+import { AuthContext } from "@/context/auth-context";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -9,6 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 import { addDays } from "date-fns";
 
 import { cn } from "@/lib/utils";
+import addInvoice from "@/firebase/firestore/addInvoice";
 
 import { CalendarIcon } from "@radix-ui/react-icons";
 
@@ -36,6 +38,8 @@ import {
 } from "@/components/ui/select";
 import { FormField as FormFieldComponent } from "../form-field/form-field";
 import { FormTableList } from "../form-table-list/form-table-list";
+
+import { generateInvoiceID } from "@/utils/generateInvoiceID";
 
 import { InvoiceType } from "@/types/types";
 
@@ -76,6 +80,8 @@ interface NewInvoiceFormProps {
 export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({
   handleSheet,
 }) => {
+  const { user } = useContext(AuthContext);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -95,19 +101,39 @@ export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({
     { id: uuidv4(), itemName: "", qty: 0, price: 0 },
   ]);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    let invoiceData: InvoiceType = {
-      ...values,
-      data: tableData,
-      status: "draft",
-      paymentDate: addDays(new Date(values.date), Number(values.net)),
-    };
-    console.log(invoiceData);
+  async function onSubmit(
+    values: z.infer<typeof formSchema>,
+    status: InvoiceType["status"]
+  ) {
+    const isValid = await form.trigger();
+
+    if (isValid) {
+      let invoiceData: InvoiceType = {
+        ...values,
+        id: generateInvoiceID(),
+        userId: user?.uid || "",
+        data: tableData,
+        status,
+        paymentDate: addDays(new Date(values.date), Number(values.net)),
+      };
+
+      try {
+        const { error } = await addInvoice(invoiceData.id, invoiceData);
+
+        if (error) {
+          return console.log(error);
+        }
+
+        handleSheet(false);
+      } catch (e) {
+        console.log(e);
+      }
+    }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form className="space-y-4">
         <FormFieldComponent
           control={form.control}
           name="name"
@@ -233,15 +259,29 @@ export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({
           <FormTableList tableData={tableData} setTableData={setTableData} />
         </div>
 
-        <div className="flex flex-row justify-end gap-2">
+        <div className="flex flex-row justify-between">
           <Button
-            variant="secondary"
+            variant="cancel"
             type="button"
             className="rounded-full"
             onClick={() => handleSheet(false)}>
-            Cancel
+            Discard
           </Button>
-          <Button type="submit">Save Changes</Button>
+          <div className="flex flex-row justify-end gap-2">
+            <Button
+              variant="secondary"
+              type="button"
+              className="rounded-full"
+              onClick={() => onSubmit(form.getValues(), "draft")}>
+              Save as Draft
+            </Button>
+            <Button
+              type="button"
+              className="rounded-full"
+              onClick={() => onSubmit(form.getValues(), "pending")}>
+              Save & Send
+            </Button>
+          </div>
         </div>
       </form>
     </Form>

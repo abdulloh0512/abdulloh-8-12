@@ -3,8 +3,8 @@ import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 const db = getFirestore(firebase_app);
 
-export default async function getUserInfo(collection: string, id: string) {
-  let docRef = doc(db, collection, id);
+export default async function getUserInfo(id: string) {
+  let docRef = doc(db, "usersInfo", id);
 
   let result = null;
   let error = null;

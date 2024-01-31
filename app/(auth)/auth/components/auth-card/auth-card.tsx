@@ -67,7 +67,7 @@ export const AuthCard = () => {
           country: formValues.country,
         };
 
-        const { error } = await addUserInfo("usersInfo", result.user.uid, data);
+        const { error } = await addUserInfo(result.user.uid, data);
 
         if (error) {
           return console.log(error);

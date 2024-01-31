@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export type InvoiceDataType = {
   id: string;
   itemName: string;
@@ -6,16 +8,26 @@ export type InvoiceDataType = {
 };
 
 export type InvoiceType = {
+  id: string;
+  userId: string;
   name: string;
   email: string;
   address: string;
   city: string;
   code: string;
   country: string;
-  date: Date;
+  date: Timestamp | Date;
   paymentDate: Date;
   net: string;
   project: string;
   data: InvoiceDataType[];
-  status: "draft" | "paid" | "pending" | "overdue";
+  status: "total" | "draft" | "paid" | "pending" | "overdue";
+};
+
+export type UserDataType = {
+  name: string;
+  street: string;
+  city: string;
+  "post-code": string;
+  country: string;
 };

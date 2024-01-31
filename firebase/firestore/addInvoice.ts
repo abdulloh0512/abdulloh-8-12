@@ -1,16 +1,16 @@
 import firebase_app from "../config";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 
-import { UserDataType } from "@/types/types";
+import { InvoiceType } from "@/types/types";
 
 const db = getFirestore(firebase_app);
 
-export default async function addUserInfo(id: string, data: UserDataType) {
+export default async function addInvoice(id: string, data: InvoiceType) {
   let result = null;
   let error = null;
 
   try {
-    result = await setDoc(doc(db, "usersInfo", id), data, {
+    result = await setDoc(doc(db, "invoices", id), data, {
       merge: true,
     });
   } catch (e) {

@@ -5,13 +5,14 @@
 @layer base {
   :root {
     --background-primary: 20 22 37;
-    --background-secondary: 32 33 59;
+    --background-secondary: 30 33 57;
     --text: 255 255 255;
-    --paid: 79 224 159;
-    --pending: 247 138 0;
-    --draft: 255 255 255;
-    --accent: 125 94 253;
-    --alert: 255 0 0;
+    --text-secondary: 223 227 250;
+    --paid: 51 214 159;
+    --pending: 255 143 0;
+    --draft: 223 227 250;
+    --accent: 124 93 250;
+    --alert: 236 87 87;
 
     /* --background: 0 0% 100%; */
     /* --foreground: 222.2 84% 4.9%; */

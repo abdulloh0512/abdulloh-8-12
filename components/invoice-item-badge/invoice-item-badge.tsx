@@ -20,7 +20,7 @@ export const InvoiceItemBadge: React.FC<InvoiceItemBadgeProps> = ({
           "bg-pending": status === "pending",
           "bg-alert": status === "overdue",
         })}></span>
-      {status}
+      <p className="relative top-[1px] ">{status}</p>
     </Badge>
   );
 };
