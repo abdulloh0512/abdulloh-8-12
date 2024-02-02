@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useEffect,
+  useState,
+} from "react";
 
 import { onAuthStateChanged, getAuth, User } from "firebase/auth";
 import firebase_app from "@/firebase/config";
@@ -11,13 +17,15 @@ import { InvoiceType } from "@/types/types";
 const auth = getAuth(firebase_app);
 
 interface AuthContextProps {
-  user: User | null;
+  currentUser: User | null;
+  setCurrentUser: Dispatch<SetStateAction<User | null>>;
   invoices: InvoiceType[];
   fetchInvoices: () => void;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
-  user: null,
+  currentUser: null,
+  setCurrentUser: () => {},
   invoices: [],
   fetchInvoices: () => {},
 });
@@ -25,13 +33,13 @@ export const AuthContext = createContext<AuthContextProps>({
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [invoices, setInvoices] = useState<InvoiceType[]>([]);
 
   const fetchInvoices = async () => {
-    if (user) {
+    if (currentUser) {
       try {
-        const { result, error } = await getAllInvoices(user.uid);
+        const { result, error } = await getAllInvoices(currentUser.uid);
         const data = result as InvoiceType[];
 
         if (error) {
@@ -51,9 +59,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser(user);
+        setCurrentUser(user);
       } else {
-        setUser(null);
+        setCurrentUser(null);
       }
     });
 
@@ -62,10 +70,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     fetchInvoices();
-  }, [user]);
+  }, [currentUser]);
 
   return (
-    <AuthContext.Provider value={{ user, invoices, fetchInvoices }}>
+    <AuthContext.Provider
+      value={{ currentUser, setCurrentUser, invoices, fetchInvoices }}>
       {children}
     </AuthContext.Provider>
   );

@@ -9,9 +9,9 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
 
-  if (user) {
+  if (currentUser) {
     redirect("/");
   }
 

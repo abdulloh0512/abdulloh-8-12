@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/context/auth-context";
 import { SheetContext } from "@/context/sheet-context";
 
-import getUserInfo from "@/firebase/firestore/getUserInfo";
+import { getCurrentUserInfo } from "@/actions/getCurrentUserInfo";
 
 import {
   Sheet,
@@ -15,11 +15,12 @@ import {
 } from "@/components/ui/sheet";
 import { NewInvoiceForm } from "../new-invoice-form/new-invoice-form";
 import { FormInfo } from "../form-info/form-info";
+
 import { UserDataType } from "@/types/types";
 
 export const InvoiceSheet = () => {
   const { isSheetOpen, setIsSheetOpen } = useContext(SheetContext);
-  const { user } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
 
   const [userData, setUserData] = useState<UserDataType>({
     name: "",
@@ -29,24 +30,15 @@ export const InvoiceSheet = () => {
     country: "",
   });
 
-  const fetchData = async () => {
-    if (user) {
-      try {
-        const { result } = await getUserInfo(user.uid);
-        const data = result?.data() as UserDataType;
-
-        if (data) {
-          setUserData(data);
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    }
-  };
-
   useEffect(() => {
-    fetchData();
-  }, [user]);
+    const fetchUserData = async () => {
+      if (currentUser) {
+        const userInfo = await getCurrentUserInfo(currentUser.uid);
+        setUserData(userInfo as UserDataType);
+      }
+    };
+    fetchUserData();
+  }, [currentUser]);
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>

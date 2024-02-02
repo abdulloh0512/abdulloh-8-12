@@ -80,7 +80,7 @@ interface NewInvoiceFormProps {
 export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({
   handleSheet,
 }) => {
-  const { user } = useContext(AuthContext);
+  const { currentUser, fetchInvoices } = useContext(AuthContext);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -111,7 +111,7 @@ export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({
       let invoiceData: InvoiceType = {
         ...values,
         id: generateInvoiceID(),
-        userId: user?.uid || "",
+        userId: currentUser?.uid || "",
         data: tableData,
         status,
         paymentDate: addDays(new Date(values.date), Number(values.net)),
@@ -125,6 +125,7 @@ export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({
         }
 
         handleSheet(false);
+        fetchInvoices();
       } catch (e) {
         console.log(e);
       }
@@ -193,7 +194,7 @@ export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({
                       <Button
                         variant={"secondary"}
                         className={cn(
-                          "w-full pl-3 text-left font-normal px-3 py-2",
+                          "rounded-md w-full pl-3 text-left font-normal px-3 py-2",
                           !field.value && "text-muted-foreground"
                         )}>
                         {field.value ? (
@@ -263,7 +264,6 @@ export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({
           <Button
             variant="cancel"
             type="button"
-            className="rounded-full"
             onClick={() => handleSheet(false)}>
             Discard
           </Button>
@@ -271,13 +271,11 @@ export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({
             <Button
               variant="secondary"
               type="button"
-              className="rounded-full"
               onClick={() => onSubmit(form.getValues(), "draft")}>
               Save as Draft
             </Button>
             <Button
               type="button"
-              className="rounded-full"
               onClick={() => onSubmit(form.getValues(), "pending")}>
               Save & Send
             </Button>

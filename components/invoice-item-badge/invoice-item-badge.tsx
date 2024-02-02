@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { InvoiceType } from "@/types/types";
 
 interface InvoiceItemBadgeProps {
-  status: InvoiceType["status"];
+  status: Exclude<InvoiceType["status"], "total">;
 }
 
 export const InvoiceItemBadge: React.FC<InvoiceItemBadgeProps> = ({

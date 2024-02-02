@@ -49,7 +49,11 @@ export const FormTableBodyRow: React.FC<FormTableBodyRowProps> = ({
       </TableCell>
       <TableCell className="px-2">{(qty * price).toFixed(2)}</TableCell>
       <TableCell className="pl-2 w-0">
-        <Button variant="outline" size="icon" onClick={onDelete}>
+        <Button
+          className="rounded-md"
+          variant="outline"
+          size="icon"
+          onClick={onDelete}>
           <TrashIcon className="h-4 w-4" />
         </Button>
       </TableCell>

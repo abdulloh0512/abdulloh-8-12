@@ -1,15 +1,23 @@
 "use client";
 
 import { useContext } from "react";
-import { AuthContext } from "@/context/auth-context";
 import { redirect } from "next/navigation";
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const { user } = useContext(AuthContext);
+import { AuthContext } from "@/context/auth-context";
 
-  if (!user) {
+import { Navbar } from "@/components/navbar/navbar";
+
+export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const { currentUser } = useContext(AuthContext);
+
+  if (!currentUser) {
     redirect("/auth");
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <Navbar />
+      {children}
+    </>
+  );
 }

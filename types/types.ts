@@ -17,7 +17,7 @@ export type InvoiceType = {
   code: string;
   country: string;
   date: Timestamp | Date;
-  paymentDate: Date;
+  paymentDate: Timestamp | Date;
   net: string;
   project: string;
   data: InvoiceDataType[];
