@@ -1,19 +1,15 @@
-"use client";
+'use client'
 
-import { useContext } from "react";
-import { AuthContext } from "@/context/auth-context";
-import { redirect } from "next/navigation";
+import { useContext } from 'react'
+import { AuthContext } from '@/context/auth-context'
+import { redirect } from 'next/navigation'
 
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const { currentUser } = useContext(AuthContext);
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
+	const { currentUser } = useContext(AuthContext)
 
-  if (currentUser) {
-    redirect("/");
-  }
+	if (currentUser) {
+		redirect('/')
+	}
 
-  return <>{children}</>;
+	return <>{children}</>
 }

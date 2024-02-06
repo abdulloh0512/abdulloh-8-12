@@ -1,4 +1,4 @@
-import firebase_app from '../config'
+import { firebase_app } from '../config'
 import { getFirestore, doc, setDoc } from 'firebase/firestore'
 
 import { UserDataType } from '@/types/types'
