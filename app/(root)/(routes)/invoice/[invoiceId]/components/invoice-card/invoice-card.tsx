@@ -35,6 +35,14 @@ export const InvoiceCard: React.FC<InvoiceCardProps> = ({ data }) => {
 		fetchUserData()
 	}, [currentUser])
 
+	const calculateTotal = (data: InvoiceType) => {
+		const total = data.data.reduce((acc, currentItem) => {
+			return acc + currentItem.price * currentItem.qty
+		}, 0)
+
+		return total
+	}
+
 	return (
 		<div className='flex flex-col p-12 bg-foreground mt-6 border border-background rounded-lg'>
 			<div className='flex flex-row justify-between'>
@@ -76,8 +84,12 @@ export const InvoiceCard: React.FC<InvoiceCardProps> = ({ data }) => {
 					<p className='font-normal text-secondary text-sm'>{data.country}</p>
 				</div>
 			</div>
-			<div className='bg-secondary/5 p-8 mt-11 border-0 rounded-lg'>
+			<div>
 				<InvoiceCardTable data={data.data} />
+				<div className='bg-black w-full flex flex-row justify-between items-center gap-2 p-8 rounded-b-lg'>
+					<p className='font-normal text-secondary text-sm'>Amount Due</p>
+					<p className='font-bold text-2xl'>Є {calculateTotal(data).toFixed(2)}</p>
+				</div>
 			</div>
 		</div>
 	)
