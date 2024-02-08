@@ -1,16 +1,14 @@
 import { firebase_app } from '../config'
-import { getFirestore, doc, getDoc } from 'firebase/firestore'
+import { getFirestore, doc, deleteDoc } from 'firebase/firestore'
 
 const db = getFirestore(firebase_app)
 
-export default async function getUserInfo(id: string) {
-	let docRef = doc(db, 'usersInfo', id)
-
+export default async function deleteInvoice(id: string) {
 	let result = null
 	let error = null
 
 	try {
-		result = await getDoc(docRef)
+		result = await deleteDoc(doc(db, 'invoices', id))
 	} catch (e) {
 		error = e
 	}

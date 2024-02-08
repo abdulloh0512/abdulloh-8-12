@@ -1,9 +1,11 @@
 'use client'
 
-import Link from 'next/link'
 import { useContext, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 import { AuthContext } from '@/context/auth-context'
+import { SheetContext } from '@/context/sheet-context'
 
 import { ChevronLeftIcon } from '@radix-ui/react-icons'
 
@@ -15,14 +17,23 @@ import { InvoiceCard } from './components/invoice-card/invoice-card'
 
 import { InvoiceType } from '@/types/types'
 import { DeleteAlert } from './components/delete-alert/delete-alert'
+import markInvoiceAsPaid from '@/firebase/firestore/markInvoiceAsPaid'
 
 export default function Invoice({ params }: { params: { invoiceId: string } }) {
-	const { invoices } = useContext(AuthContext)
+	const { invoices, fetchInvoices } = useContext(AuthContext)
 	const currentInvoice = invoices.find(invoice => invoice.id === params.invoiceId)
 
 	if (!currentInvoice) return
 
 	const [isAlertOpen, setIsAlertOpen] = useState(false)
+	const { setIsSheetOpen } = useContext(SheetContext)
+	const router = useRouter()
+
+	const handleInvoicePayment = (invoiceId: string) => {
+		markInvoiceAsPaid(invoiceId)
+		fetchInvoices()
+		router.push('/')
+	}
 
 	return (
 		<>
@@ -41,7 +52,8 @@ export default function Invoice({ params }: { params: { invoiceId: string } }) {
 					<div className='flex flex-row gap-2'>
 						<Button
 							variant='secondary'
-							onClick={() => console.log('edit')}>
+							onClick={() => console.log('edit')}
+							disabled={currentInvoice.status === 'paid' || currentInvoice.status === 'pending' ? true : false}>
 							Edit
 						</Button>
 						<Button
@@ -49,7 +61,11 @@ export default function Invoice({ params }: { params: { invoiceId: string } }) {
 							onClick={() => setIsAlertOpen(true)}>
 							Delete
 						</Button>
-						<Button onClick={() => console.log('paid')}>Mark as Paid</Button>
+						<Button
+							onClick={() => handleInvoicePayment(currentInvoice.id)}
+							disabled={currentInvoice.status === 'paid' || currentInvoice.status === 'draft' ? true : false}>
+							Mark as Paid
+						</Button>
 					</div>
 				</div>
 			</Header>

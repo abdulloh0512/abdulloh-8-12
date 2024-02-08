@@ -1,4 +1,8 @@
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useContext } from 'react'
+
+import { AuthContext } from '@/context/auth-context'
+
+import deleteInvoice from '@/firebase/firestore/deleteInvoice'
 
 import {
 	AlertDialog,
@@ -9,6 +13,7 @@ import {
 	AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
+import { useRouter } from 'next/navigation'
 
 interface DeleteAlertProps {
 	invoiceId: string
@@ -17,6 +22,16 @@ interface DeleteAlertProps {
 }
 
 export const DeleteAlert: React.FC<DeleteAlertProps> = ({ isAlertOpen, setIsAlertOpen, invoiceId }) => {
+	const router = useRouter()
+	const { fetchInvoices } = useContext(AuthContext)
+
+	const handleDeleteInvoice = (invoiceId: string) => {
+		deleteInvoice(invoiceId)
+		setIsAlertOpen(false)
+		fetchInvoices()
+		router.push('/')
+	}
+
 	return (
 		<AlertDialog
 			open={isAlertOpen}
@@ -36,7 +51,7 @@ export const DeleteAlert: React.FC<DeleteAlertProps> = ({ isAlertOpen, setIsAler
 					</Button>
 					<Button
 						variant='destructive'
-						onClick={() => console.log('del')}>
+						onClick={() => handleDeleteInvoice(invoiceId)}>
 						Delete
 					</Button>
 				</AlertDialogFooter>

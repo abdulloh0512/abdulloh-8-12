@@ -31,7 +31,7 @@ export default async function RootLayout({
 				href='/favicon.png'
 				sizes='any'
 			/>
-			<body className={cn('bg-background font-sans antialiased text-primary', fontRoboto.variable)}>
+			<body className={cn('bg-background font-sans antialiased text-primary ml-20 p-6', fontRoboto.variable)}>
 				<AuthProvider>
 					<SheetProvider>
 						{children}
