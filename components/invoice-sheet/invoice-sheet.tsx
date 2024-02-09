@@ -8,7 +8,7 @@ import { SheetContext } from '@/context/sheet-context'
 import getUserInfo from '@/firebase/firestore/getUserInfo'
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
-import { NewInvoiceForm } from '../new-invoice-form/new-invoice-form'
+import { InvoiceForm } from '../nvoice-form/invoice-form'
 import { FormInfo } from '../form-info/form-info'
 
 import { UserDataType } from '@/types/types'
@@ -68,7 +68,7 @@ export const InvoiceSheet = () => {
 
 				<div className='mt-8 flex flex-col gap-4'>
 					<p className='text-sm text-accent'>Bill To</p>
-					<NewInvoiceForm handleSheet={setIsSheetOpen} />
+					<InvoiceForm handleSheet={setIsSheetOpen} />
 				</div>
 			</SheetContent>
 		</Sheet>

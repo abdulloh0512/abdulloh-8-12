@@ -26,13 +26,18 @@ export default function Invoice({ params }: { params: { invoiceId: string } }) {
 	if (!currentInvoice) return
 
 	const [isAlertOpen, setIsAlertOpen] = useState(false)
-	const { setIsSheetOpen } = useContext(SheetContext)
+	const { setIsSheetOpen, setEditingInvoiceId } = useContext(SheetContext)
 	const router = useRouter()
 
 	const handleInvoicePayment = (invoiceId: string) => {
 		markInvoiceAsPaid(invoiceId)
 		fetchInvoices()
 		router.push('/')
+	}
+
+	const handleInvoiceEdit = (invoiceId: string) => {
+		setEditingInvoiceId(invoiceId)
+		setIsSheetOpen(true)
 	}
 
 	return (
@@ -52,7 +57,7 @@ export default function Invoice({ params }: { params: { invoiceId: string } }) {
 					<div className='flex flex-row gap-2'>
 						<Button
 							variant='secondary'
-							onClick={() => console.log('edit')}
+							onClick={() => handleInvoiceEdit(currentInvoice.id)}
 							disabled={currentInvoice.status === 'paid' || currentInvoice.status === 'pending' ? true : false}>
 							Edit
 						</Button>

@@ -1,15 +1,17 @@
 'use client'
 
 import * as z from 'zod'
-import { Dispatch, SetStateAction, useContext, useState } from 'react'
-import { AuthContext } from '@/context/auth-context'
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { format } from 'date-fns'
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { format, addDays } from 'date-fns'
 import { v4 as uuidv4 } from 'uuid'
-import { addDays } from 'date-fns'
+
+import { AuthContext } from '@/context/auth-context'
+import { SheetContext } from '@/context/sheet-context'
 
 import { cn } from '@/lib/utils'
+import { generateInvoiceID } from '@/utils/generateInvoiceID'
 import addInvoice from '@/firebase/firestore/addInvoice'
 
 import { CalendarIcon } from '@radix-ui/react-icons'
@@ -22,9 +24,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { FormField as FormFieldComponent } from '../form-field/form-field'
 import { FormTableList } from '../form-table-list/form-table-list'
 
-import { generateInvoiceID } from '@/utils/generateInvoiceID'
-
-import { InvoiceType } from '@/types/types'
+import { InvoiceDataType, InvoiceType } from '@/types/types'
 
 const formSchema = z.object({
 	name: z.string().min(2, {
@@ -54,12 +54,45 @@ const formSchema = z.object({
 	}),
 })
 
-interface NewInvoiceFormProps {
+interface InvoiceFormProps {
 	handleSheet: Dispatch<SetStateAction<boolean>>
 }
 
-export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({ handleSheet }) => {
-	const { currentUser, fetchInvoices } = useContext(AuthContext)
+const initialTableData = [{ id: uuidv4(), itemName: '', qty: 0, price: 0 }]
+const initialInvoiceData = {
+	id: '',
+	userId: '',
+	name: '',
+	email: '',
+	address: '',
+	city: '',
+	code: '',
+	country: '',
+	date: new Date(),
+	paymentDate: new Date(),
+	status: 'draft' as InvoiceType['status'],
+	net: '',
+	project: '',
+	data: [],
+}
+
+export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
+	const { currentUser, fetchInvoices, invoices } = useContext(AuthContext)
+	const { editingInvoiceId } = useContext(SheetContext)
+
+	const [currentInvoiceData, setCurrentInvoiceData] = useState<InvoiceType>(initialInvoiceData)
+	const [tableData, setTableData] = useState<InvoiceDataType[]>(initialTableData)
+
+	useEffect(() => {
+		if (editingInvoiceId) {
+			const currentInvoice = invoices.find(inv => inv.id === editingInvoiceId)
+
+			if (currentInvoice) {
+				setCurrentInvoiceData(currentInvoice)
+				setTableData(currentInvoice.data)
+			}
+		}
+	}, [editingInvoiceId])
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -76,7 +109,7 @@ export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({ handleSheet }) =
 		},
 	})
 
-	const [tableData, setTableData] = useState([{ id: uuidv4(), itemName: '', qty: 0, price: 0 }])
+	console.log(currentInvoiceData.net)
 
 	async function onSubmit(values: z.infer<typeof formSchema>, status: InvoiceType['status']) {
 		const isValid = await form.trigger()
@@ -84,22 +117,22 @@ export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({ handleSheet }) =
 		if (isValid) {
 			let invoiceData: InvoiceType = {
 				...values,
-				id: generateInvoiceID(),
-				userId: currentUser?.uid || '',
+				id: currentInvoiceData.id || generateInvoiceID(),
+				userId: currentInvoiceData.userId || currentUser?.uid || '',
 				data: tableData,
-				status,
-				paymentDate: addDays(new Date(values.date), Number(values.net)),
+				status: currentInvoiceData.status || status,
+				paymentDate: currentInvoiceData.paymentDate || addDays(new Date(values.date), Number(values.net)),
 			}
 
 			try {
-				const { error } = await addInvoice(invoiceData.id, invoiceData)
+				// const { error } = await addInvoice(invoiceData.id, invoiceData)
 
-				if (error) {
-					return console.log(error)
-				}
+				// if (error) {
+				// 	return console.log(error)
+				// }
 
 				handleSheet(false)
-				fetchInvoices()
+				// fetchInvoices()
 			} catch (e) {
 				console.log(e)
 			}
@@ -115,6 +148,7 @@ export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({ handleSheet }) =
 					label="Client's Name"
 					placeholder="Client's Name"
 					type='text'
+					value={currentInvoiceData.name}
 				/>
 				<FormFieldComponent
 					control={form.control}
@@ -122,6 +156,7 @@ export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({ handleSheet }) =
 					label="Client's Email"
 					placeholder="Client's Email"
 					type='email'
+					value={currentInvoiceData.email}
 				/>
 				<FormFieldComponent
 					control={form.control}
@@ -129,6 +164,7 @@ export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({ handleSheet }) =
 					label="Client's Address"
 					placeholder="Client's Address"
 					type='text'
+					value={currentInvoiceData.address}
 				/>
 
 				<div className='flex flex-row gap-4'>
@@ -138,6 +174,7 @@ export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({ handleSheet }) =
 						label='City'
 						placeholder='City'
 						type='text'
+						value={currentInvoiceData.city}
 					/>
 					<FormFieldComponent
 						control={form.control}
@@ -145,6 +182,7 @@ export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({ handleSheet }) =
 						label='Post Code'
 						placeholder='Post Code'
 						type='text'
+						value={currentInvoiceData.code}
 					/>
 					<FormFieldComponent
 						control={form.control}
@@ -152,6 +190,7 @@ export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({ handleSheet }) =
 						label='Country'
 						placeholder='Country'
 						type='text'
+						value={currentInvoiceData.country}
 					/>
 				</div>
 
@@ -200,7 +239,10 @@ export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({ handleSheet }) =
 								<FormLabel className='font-light'>Payment Terms</FormLabel>
 								<Select
 									onValueChange={field.onChange}
-									defaultValue={field.value}>
+									defaultValue={field.value}
+									// defaultValue={currentInvoiceData.net || field.value}
+									// value={currentInvoiceData.net || field.value}
+								>
 									<FormControl>
 										<SelectTrigger className='bg-foreground w-full hover:bg-background'>
 											<SelectValue placeholder='Select terms' />
@@ -224,6 +266,7 @@ export const NewInvoiceForm: React.FC<NewInvoiceFormProps> = ({ handleSheet }) =
 					label='Project Description'
 					placeholder='Project Description'
 					type='text'
+					value={currentInvoiceData.project}
 				/>
 
 				<div>
