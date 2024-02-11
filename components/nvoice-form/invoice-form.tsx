@@ -11,6 +11,7 @@ import { AuthContext } from '@/context/auth-context'
 import { SheetContext } from '@/context/sheet-context'
 
 import { cn } from '@/lib/utils'
+import { formattedDate } from '@/utils/formattedDate'
 import { generateInvoiceID } from '@/utils/generateInvoiceID'
 import addInvoice from '@/firebase/firestore/addInvoice'
 
@@ -25,6 +26,7 @@ import { FormField as FormFieldComponent } from '../form-field/form-field'
 import { FormTableList } from '../form-table-list/form-table-list'
 
 import { InvoiceDataType, InvoiceType } from '@/types/types'
+import { Timestamp } from 'firebase/firestore'
 
 const formSchema = z.object({
 	name: z.string().min(2, {
@@ -90,6 +92,18 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 			if (currentInvoice) {
 				setCurrentInvoiceData(currentInvoice)
 				setTableData(currentInvoice.data)
+
+				form.reset({
+					name: currentInvoice.name,
+					email: currentInvoice.email,
+					address: currentInvoice.address,
+					city: currentInvoice.city,
+					code: currentInvoice.code,
+					country: currentInvoice.country,
+					date: new Date(formattedDate(currentInvoice.date as Timestamp)),
+					net: currentInvoice.net,
+					project: currentInvoice.project,
+				})
 			}
 		}
 	}, [editingInvoiceId])
@@ -108,8 +122,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 			project: '',
 		},
 	})
-
-	console.log(currentInvoiceData.net)
 
 	async function onSubmit(values: z.infer<typeof formSchema>, status: InvoiceType['status']) {
 		const isValid = await form.trigger()
@@ -131,8 +143,10 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 				// 	return console.log(error)
 				// }
 
-				handleSheet(false)
+				// handleSheet(false)
 				// fetchInvoices()
+
+				console.log(invoiceData)
 			} catch (e) {
 				console.log(e)
 			}
@@ -238,11 +252,14 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 							<FormItem className='w-full'>
 								<FormLabel className='font-light'>Payment Terms</FormLabel>
 								<Select
-									onValueChange={field.onChange}
-									defaultValue={field.value}
-									// defaultValue={currentInvoiceData.net || field.value}
-									// value={currentInvoiceData.net || field.value}
-								>
+									onValueChange={value => {
+										field.onChange(value)
+
+										if (value) {
+											setCurrentInvoiceData(prev => ({ ...prev, net: value }))
+										}
+									}}
+									value={currentInvoiceData.net}>
 									<FormControl>
 										<SelectTrigger className='bg-foreground w-full hover:bg-background'>
 											<SelectValue placeholder='Select terms' />
