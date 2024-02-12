@@ -9,10 +9,9 @@ interface FormFieldProps {
 	label: string
 	placeholder: string
 	type: 'email' | 'text' | 'number' | 'password'
-	value: string
 }
 
-export const FormField: React.FC<FormFieldProps> = ({ control, name, label, placeholder, type, value }) => {
+export const FormField: React.FC<FormFieldProps> = ({ control, name, label, placeholder, type }) => {
 	return (
 		<FormFieldUI
 			control={control}
@@ -25,7 +24,6 @@ export const FormField: React.FC<FormFieldProps> = ({ control, name, label, plac
 							type={type}
 							placeholder={placeholder}
 							{...field}
-							value={value}
 						/>
 					</FormControl>
 					<FormMessage />

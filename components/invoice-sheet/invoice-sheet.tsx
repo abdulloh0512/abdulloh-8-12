@@ -8,13 +8,13 @@ import { SheetContext } from '@/context/sheet-context'
 import getUserInfo from '@/firebase/firestore/getUserInfo'
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
-import { InvoiceForm } from '../nvoice-form/invoice-form'
+import { InvoiceForm } from '../invoice-form/invoice-form'
 import { FormInfo } from '../form-info/form-info'
 
 import { UserDataType } from '@/types/types'
 
 export const InvoiceSheet = () => {
-	const { isSheetOpen, setIsSheetOpen } = useContext(SheetContext)
+	const { isSheetOpen, handleSheet } = useContext(SheetContext)
 	const { currentUser } = useContext(AuthContext)
 
 	const [userData, setUserData] = useState<UserDataType>({
@@ -38,7 +38,7 @@ export const InvoiceSheet = () => {
 	return (
 		<Sheet
 			open={isSheetOpen}
-			onOpenChange={setIsSheetOpen}>
+			onOpenChange={handleSheet}>
 			<SheetContent side='left'>
 				<SheetHeader>
 					<SheetTitle>New Invoice</SheetTitle>
@@ -68,7 +68,7 @@ export const InvoiceSheet = () => {
 
 				<div className='mt-8 flex flex-col gap-4'>
 					<p className='text-sm text-accent'>Bill To</p>
-					<InvoiceForm handleSheet={setIsSheetOpen} />
+					<InvoiceForm handleSheet={handleSheet} />
 				</div>
 			</SheetContent>
 		</Sheet>

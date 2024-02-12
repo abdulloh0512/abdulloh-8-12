@@ -7,6 +7,8 @@ import Link from 'next/link'
 import { AuthContext } from '@/context/auth-context'
 import { SheetContext } from '@/context/sheet-context'
 
+import markInvoiceAsPaid from '@/firebase/firestore/markInvoiceAsPaid'
+
 import { ChevronLeftIcon } from '@radix-ui/react-icons'
 
 import { Header } from '@/components/header/header'
@@ -14,10 +16,9 @@ import { Main } from '@/components/main/main'
 import { InvoiceItemBadge } from '@/components/invoice-item-badge/invoice-item-badge'
 import { Button } from '@/components/ui/button'
 import { InvoiceCard } from './components/invoice-card/invoice-card'
+import { DeleteAlert } from './components/delete-alert/delete-alert'
 
 import { InvoiceType } from '@/types/types'
-import { DeleteAlert } from './components/delete-alert/delete-alert'
-import markInvoiceAsPaid from '@/firebase/firestore/markInvoiceAsPaid'
 
 export default function Invoice({ params }: { params: { invoiceId: string } }) {
 	const { invoices, fetchInvoices } = useContext(AuthContext)

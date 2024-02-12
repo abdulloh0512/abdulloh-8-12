@@ -2,7 +2,7 @@
 
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { format, addDays } from 'date-fns'
 import { v4 as uuidv4 } from 'uuid'
@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils'
 import { formattedDate } from '@/utils/formattedDate'
 import { generateInvoiceID } from '@/utils/generateInvoiceID'
 import addInvoice from '@/firebase/firestore/addInvoice'
+import editInvoice from '@/firebase/firestore/editInvoice'
 
 import { CalendarIcon } from '@radix-ui/react-icons'
 
@@ -57,7 +58,7 @@ const formSchema = z.object({
 })
 
 interface InvoiceFormProps {
-	handleSheet: Dispatch<SetStateAction<boolean>>
+	handleSheet: () => void
 }
 
 const initialTableData = [{ id: uuidv4(), itemName: '', qty: 0, price: 0 }]
@@ -137,16 +138,17 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 			}
 
 			try {
-				// const { error } = await addInvoice(invoiceData.id, invoiceData)
+				let error
 
-				// if (error) {
-				// 	return console.log(error)
-				// }
+				const result = editingInvoiceId ? await addInvoice(invoiceData) : await editInvoice(invoiceData)
+				error = result.error
 
-				// handleSheet(false)
-				// fetchInvoices()
+				if (error) {
+					return console.log(error)
+				}
 
-				console.log(invoiceData)
+				handleSheet()
+				fetchInvoices()
 			} catch (e) {
 				console.log(e)
 			}
@@ -162,7 +164,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 					label="Client's Name"
 					placeholder="Client's Name"
 					type='text'
-					value={currentInvoiceData.name}
 				/>
 				<FormFieldComponent
 					control={form.control}
@@ -170,7 +171,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 					label="Client's Email"
 					placeholder="Client's Email"
 					type='email'
-					value={currentInvoiceData.email}
 				/>
 				<FormFieldComponent
 					control={form.control}
@@ -178,7 +178,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 					label="Client's Address"
 					placeholder="Client's Address"
 					type='text'
-					value={currentInvoiceData.address}
 				/>
 
 				<div className='flex flex-row gap-4'>
@@ -188,7 +187,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 						label='City'
 						placeholder='City'
 						type='text'
-						value={currentInvoiceData.city}
 					/>
 					<FormFieldComponent
 						control={form.control}
@@ -196,7 +194,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 						label='Post Code'
 						placeholder='Post Code'
 						type='text'
-						value={currentInvoiceData.code}
 					/>
 					<FormFieldComponent
 						control={form.control}
@@ -204,7 +201,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 						label='Country'
 						placeholder='Country'
 						type='text'
-						value={currentInvoiceData.country}
 					/>
 				</div>
 
@@ -245,36 +241,35 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 							</FormItem>
 						)}
 					/>
-					<FormField
-						control={form.control}
-						name='net'
-						render={({ field }) => (
-							<FormItem className='w-full'>
-								<FormLabel className='font-light'>Payment Terms</FormLabel>
-								<Select
-									onValueChange={value => {
-										field.onChange(value)
-
-										if (value) {
+					{(currentInvoiceData.net || !editingInvoiceId) && (
+						<FormField
+							control={form.control}
+							name='net'
+							render={({ field }) => (
+								<FormItem className='w-full'>
+									<FormLabel className='font-light'>Payment Terms</FormLabel>
+									<Select
+										onValueChange={value => {
+											field.onChange(value)
 											setCurrentInvoiceData(prev => ({ ...prev, net: value }))
-										}
-									}}
-									value={currentInvoiceData.net}>
-									<FormControl>
-										<SelectTrigger className='bg-foreground w-full hover:bg-background'>
-											<SelectValue placeholder='Select terms' />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										<SelectItem value='7'>Net 7 Days</SelectItem>
-										<SelectItem value='14'>Net 14 Days</SelectItem>
-										<SelectItem value='30'>Net 30 Days</SelectItem>
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
+										}}
+										value={currentInvoiceData.net}>
+										<FormControl>
+											<SelectTrigger className='bg-foreground w-full hover:bg-background'>
+												<SelectValue placeholder='Select terms' />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											<SelectItem value='7'>Net 7 Days</SelectItem>
+											<SelectItem value='14'>Net 14 Days</SelectItem>
+											<SelectItem value='30'>Net 30 Days</SelectItem>
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					)}
 				</div>
 
 				<FormFieldComponent
@@ -283,7 +278,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 					label='Project Description'
 					placeholder='Project Description'
 					type='text'
-					value={currentInvoiceData.project}
 				/>
 
 				<div>
@@ -297,7 +291,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 					<Button
 						variant='cancel'
 						type='button'
-						onClick={() => handleSheet(false)}>
+						onClick={handleSheet}>
 						Discard
 					</Button>
 					<div className='flex flex-row justify-end gap-2'>
