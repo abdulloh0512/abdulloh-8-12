@@ -25,15 +25,14 @@ export default function Home() {
 
 	return (
 		<>
-			<Header className=' items-center'>
+			<Header className='items-center'>
 				<div className='font-bold flex flex-col gap-4'>
 					<h1 className='text-4xl'>Invoices</h1>
 					<p className='text-primary font-normal text-sm'>
-						{invoices.length > 0
-							? `There ${currentInvoices === 1 ? 'is' : 'are'} ${currentInvoices || 'no'} ${status} invoice${
-									currentInvoices !== 1 ? 's' : ''
-							  }`
-							: 'No invoices'}
+						{invoices.length > 0 ? (
+							<span className='hidden md:inline'>{`There ${currentInvoices === 1 ? 'is' : 'are'} `}</span>
+						) : null}
+						{`${currentInvoices || '0'} ${status} invoice${currentInvoices !== 1 ? 's' : ''}`}
 					</p>
 				</div>
 				<div className='flex items-center gap-4'>
@@ -44,7 +43,7 @@ export default function Home() {
 						onClick={() => setIsSheetOpen(true)}
 						className='flex flex-row justify-between gap-2'>
 						<PlusCircledIcon className='h-6 w-6' />
-						New Invoice
+						New <span className='hidden md:block'>Invoice</span>
 					</Button>
 				</div>
 			</Header>
