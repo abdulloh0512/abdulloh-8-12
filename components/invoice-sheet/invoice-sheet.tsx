@@ -14,7 +14,7 @@ import { FormInfo } from '../form-info/form-info'
 import { UserDataType } from '@/types/types'
 
 export const InvoiceSheet = () => {
-	const { isSheetOpen, handleSheet } = useContext(SheetContext)
+	const { isSheetOpen, handleSheet, editingInvoiceId } = useContext(SheetContext)
 	const { currentUser } = useContext(AuthContext)
 
 	const [userData, setUserData] = useState<UserDataType>({
@@ -41,7 +41,7 @@ export const InvoiceSheet = () => {
 			onOpenChange={handleSheet}>
 			<SheetContent side='left'>
 				<SheetHeader>
-					<SheetTitle>New Invoice</SheetTitle>
+					<SheetTitle>{editingInvoiceId ? 'Edit Invoice' : 'New Invoice'}</SheetTitle>
 				</SheetHeader>
 
 				<div className='mt-8 flex flex-col gap-4 mx-1'>

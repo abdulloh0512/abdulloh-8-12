@@ -10,7 +10,7 @@ interface InvoiceCardTableProps {
 export const InvoiceCardTable: React.FC<InvoiceCardTableProps> = ({ data }) => {
 	return (
 		<>
-			<Table className='bg-secondary/5 p-8 mt-11 border-0 rounded-t-lg border-separate border-spacing-y-4'>
+			<Table className='bg-secondary/5 p-6 mt-11 border-0 rounded-t-lg border-separate border-spacing-y-4 sm:p-8'>
 				<TableHeader>
 					<TableRow>
 						<TableHead className='w-[100px]'>Item Name</TableHead>

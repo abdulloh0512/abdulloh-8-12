@@ -43,7 +43,7 @@ export const DeleteAlert: React.FC<DeleteAlertProps> = ({ isAlertOpen, setIsAler
 						Are you sure you want to delete invoice #{invoiceId.slice(0, 6)}? This action cannot be undone.
 					</AlertDialogDescription>
 				</AlertDialogHeader>
-				<AlertDialogFooter>
+				<AlertDialogFooter className='gap-4'>
 					<Button
 						variant='secondary'
 						onClick={() => setIsAlertOpen(false)}>

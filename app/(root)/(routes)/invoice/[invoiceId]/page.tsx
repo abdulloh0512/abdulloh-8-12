@@ -1,24 +1,21 @@
 'use client'
 
 import { useContext, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 import { AuthContext } from '@/context/auth-context'
 import { SheetContext } from '@/context/sheet-context'
-
-import markInvoiceAsPaid from '@/firebase/firestore/markInvoiceAsPaid'
 
 import { ChevronLeftIcon } from '@radix-ui/react-icons'
 
 import { Header } from '@/components/header/header'
 import { Main } from '@/components/main/main'
 import { InvoiceItemBadge } from '@/components/invoice-item-badge/invoice-item-badge'
-import { Button } from '@/components/ui/button'
 import { InvoiceCard } from './components/invoice-card/invoice-card'
 import { DeleteAlert } from './components/delete-alert/delete-alert'
 
 import { InvoiceType } from '@/types/types'
+import { InvoiceButtons } from './components/invoice-buttons/invoice-buttons'
 
 export default function Invoice({ params }: { params: { invoiceId: string } }) {
 	const { invoices, fetchInvoices } = useContext(AuthContext)
@@ -28,18 +25,6 @@ export default function Invoice({ params }: { params: { invoiceId: string } }) {
 
 	const [isAlertOpen, setIsAlertOpen] = useState(false)
 	const { setIsSheetOpen, setEditingInvoiceId } = useContext(SheetContext)
-	const router = useRouter()
-
-	const handleInvoicePayment = (invoiceId: string) => {
-		markInvoiceAsPaid(invoiceId)
-		fetchInvoices()
-		router.push('/')
-	}
-
-	const handleInvoiceEdit = (invoiceId: string) => {
-		setEditingInvoiceId(invoiceId)
-		setIsSheetOpen(true)
-	}
 
 	return (
 		<>
@@ -51,28 +36,18 @@ export default function Invoice({ params }: { params: { invoiceId: string } }) {
 					<p className='relative top-[1px]'>Go back</p>
 				</Link>
 				<div className='flex flex-row justify-between items-center w-full mt-6 py-5 px-8 bg-foreground border border-background rounded-lg'>
-					<div className='flex flex-row gap-6 items-center'>
+					<div className='flex flex-row gap-6 items-center justify-between w-full sm:w-fit'>
 						<p className='font-normal text-secondary text-sm'>Status</p>
 						<InvoiceItemBadge status={currentInvoice?.status as Exclude<InvoiceType['status'], 'total'>} />
 					</div>
-					<div className='flex flex-row gap-2'>
-						<Button
-							variant='secondary'
-							onClick={() => handleInvoiceEdit(currentInvoice.id)}
-							disabled={currentInvoice.status === 'paid' || currentInvoice.status === 'pending' ? true : false}>
-							Edit
-						</Button>
-						<Button
-							variant='destructive'
-							onClick={() => setIsAlertOpen(true)}>
-							Delete
-						</Button>
-						<Button
-							onClick={() => handleInvoicePayment(currentInvoice.id)}
-							disabled={currentInvoice.status === 'paid' || currentInvoice.status === 'draft' ? true : false}>
-							Mark as Paid
-						</Button>
-					</div>
+					<InvoiceButtons
+						className='hidden sm:flex'
+						currentInvoice={currentInvoice}
+						fetchInvoices={fetchInvoices}
+						setIsAlertOpen={setIsAlertOpen}
+						setIsSheetOpen={setIsSheetOpen}
+						setEditingInvoiceId={setEditingInvoiceId}
+					/>
 				</div>
 			</Header>
 			<Main>
@@ -83,6 +58,16 @@ export default function Invoice({ params }: { params: { invoiceId: string } }) {
 					invoiceId={currentInvoice.id}
 				/>
 			</Main>
+			<footer className='fixed bottom-0 left-0 right-0 w-full bg-foreground p-6 sm:hidden'>
+				<InvoiceButtons
+					className='flex justify-around sm:hidden'
+					currentInvoice={currentInvoice}
+					fetchInvoices={fetchInvoices}
+					setIsAlertOpen={setIsAlertOpen}
+					setIsSheetOpen={setIsSheetOpen}
+					setEditingInvoiceId={setEditingInvoiceId}
+				/>
+			</footer>
 		</>
 	)
 }

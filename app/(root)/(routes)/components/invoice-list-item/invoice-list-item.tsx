@@ -14,7 +14,7 @@ interface InvoiceListItemProps {
 	date: Timestamp | Date
 	name: string
 	data: InvoiceDataType[]
-	status: Exclude<InvoiceType['status'], 'total'>
+	status: InvoiceType['status']
 }
 
 export const InvoiceListItem: React.FC<InvoiceListItemProps> = ({ id, date, name, data, status }) => {

@@ -8,7 +8,7 @@ import { UserIcon } from '../user-icon/user-icon'
 
 export const Navbar = () => {
 	return (
-		<nav className='fixed top-0 left-0 w-full bg-foreground flex flex-row justify-between md:flex-col md:w-20 md:min-h-screen md:rounded-r-2xl'>
+		<nav className='fixed top-0 left-0 w-full bg-foreground flex flex-row justify-between md:flex-col md:w-20 md:min-h-screen md:rounded-r-2xl z-10'>
 			<div className='bg-accent w-20 md:w-full aspect-square rounded-r-2xl'>
 				<Link
 					href='/'
