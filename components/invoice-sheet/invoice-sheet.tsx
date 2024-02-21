@@ -50,19 +50,23 @@ export const InvoiceSheet = () => {
 						heading='Street Address'
 						text={userData.street}
 					/>
-					<div className='flex flex-row gap-4'>
-						<FormInfo
-							heading='City'
-							text={userData.city}
-						/>
-						<FormInfo
-							heading='Post Code'
-							text={userData['post-code']}
-						/>
-						<FormInfo
-							heading='Country'
-							text={userData.country}
-						/>
+					<div className='flex flex-col gap-4 sm:flex-row'>
+						<div className='flex flex-row gap-4 basis-2/3'>
+							<FormInfo
+								heading='City'
+								text={userData.city}
+							/>
+							<FormInfo
+								heading='Post Code'
+								text={userData['post-code']}
+							/>
+						</div>
+						<div className='basis-1/3'>
+							<FormInfo
+								heading='Country'
+								text={userData.country}
+							/>
+						</div>
 					</div>
 				</div>
 

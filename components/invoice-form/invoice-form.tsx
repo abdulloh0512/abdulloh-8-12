@@ -180,31 +180,35 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 					type='text'
 				/>
 
-				<div className='flex flex-row gap-4'>
-					<FormFieldComponent
-						control={form.control}
-						name='city'
-						label='City'
-						placeholder='City'
-						type='text'
-					/>
-					<FormFieldComponent
-						control={form.control}
-						name='code'
-						label='Post Code'
-						placeholder='Post Code'
-						type='text'
-					/>
-					<FormFieldComponent
-						control={form.control}
-						name='country'
-						label='Country'
-						placeholder='Country'
-						type='text'
-					/>
+				<div className='flex flex-col gap-4 sm:flex-row'>
+					<div className='flex flex-row gap-4 basis-2/3'>
+						<FormFieldComponent
+							control={form.control}
+							name='city'
+							label='City'
+							placeholder='City'
+							type='text'
+						/>
+						<FormFieldComponent
+							control={form.control}
+							name='code'
+							label='Post Code'
+							placeholder='Post Code'
+							type='text'
+						/>
+					</div>
+					<div className='basis-1/3'>
+						<FormFieldComponent
+							control={form.control}
+							name='country'
+							label='Country'
+							placeholder='Country'
+							type='text'
+						/>
+					</div>
 				</div>
 
-				<div className='flex flex-row gap-4 pt-4'>
+				<div className='flex flex-col gap-4 pt-4 sm:flex-row'>
 					<FormField
 						control={form.control}
 						name='date'
@@ -287,7 +291,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 					/>
 				</div>
 
-				<div className='flex flex-row justify-between'>
+				<div className='flex flex-row justify-between gap-2'>
 					<Button
 						variant='cancel'
 						type='button'
@@ -299,12 +303,12 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 							variant='secondary'
 							type='button'
 							onClick={() => onSubmit(form.getValues(), 'draft')}>
-							Save as Draft
+							<span className='hidden sm:block'>Save as</span> Draft
 						</Button>
 						<Button
 							type='button'
 							onClick={() => onSubmit(form.getValues(), 'pending')}>
-							Save & Send
+							<span className='hidden sm:block'>Save &</span> Send
 						</Button>
 					</div>
 				</div>

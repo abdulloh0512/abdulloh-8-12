@@ -27,7 +27,7 @@ export default function Home() {
 		<>
 			<Header className='items-center'>
 				<div className='font-bold flex flex-col gap-4'>
-					<h1 className='text-4xl'>Invoices</h1>
+					<h1 className='text-2xl sm:text-4xl'>Invoices</h1>
 					<p className='text-primary font-normal text-sm'>
 						{invoices.length > 0 ? (
 							<span className='hidden md:inline'>{`There ${currentInvoices === 1 ? 'is' : 'are'} `}</span>
@@ -35,7 +35,7 @@ export default function Home() {
 						{`${currentInvoices || '0'} ${status} invoice${currentInvoices !== 1 ? 's' : ''}`}
 					</p>
 				</div>
-				<div className='flex items-center gap-4'>
+				<div className='flex items-center gap-2 sm:gap-4'>
 					<InvoiceSelect onSelect={setStatus} />
 					<Button
 						size='withIcon'
