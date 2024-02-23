@@ -23,7 +23,7 @@ Similarly, the code itself definitely needs a refactoring, but I have no intenti
 
 Of the things that are badly resolved, there is definitely wrong state holding, no loading, lack of toasts, and an application architecture that is not fully thought out.
 
-[Link to the application]()
+[Link to the application](https://frontend-mentor-invoice-a85bpo7y3-pawel-gnat.vercel.app/auth)
 
 ### How to use
 
