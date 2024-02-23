@@ -7,6 +7,7 @@ This is a solution to the [Invoice app challenge on Frontend Mentor](https://www
 - [Overview](#overview)
   - [Project description](#description)
   - [How to use](#how-to-use)
+  - [Screenshot](#screenshot)
   - [Technology stack](#technology-stack)
   - [Further improvements](#further-improvements)
 - [Author](#author)
@@ -23,11 +24,15 @@ Similarly, the code itself definitely needs a refactoring, but I have no intenti
 
 Of the things that are badly resolved, there is definitely wrong state holding, no loading, lack of toasts, and an application architecture that is not fully thought out.
 
-[Link to the application](https://frontend-mentor-invoice-a85bpo7y3-pawel-gnat.vercel.app/auth)
+[Link to the application](https://frontend-mentor-invoice-app-five.vercel.app/)
 
 ### How to use
 
 You can use the test account test@test.com/test123 or create your own test account.
+
+### Screenshot
+
+![](./screenshots/screenshot.jpg)
 
 ### Technology stack
 
