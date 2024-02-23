@@ -18,13 +18,12 @@ import { InvoiceType } from '@/types/types'
 import { InvoiceButtons } from './components/invoice-buttons/invoice-buttons'
 
 export default function Invoice({ params }: { params: { invoiceId: string } }) {
+	const [isAlertOpen, setIsAlertOpen] = useState(false)
+	const { setIsSheetOpen, setEditingInvoiceId } = useContext(SheetContext)
 	const { invoices, fetchInvoices } = useContext(AuthContext)
 	const currentInvoice = invoices.find(invoice => invoice.id === params.invoiceId)
 
 	if (!currentInvoice) return
-
-	const [isAlertOpen, setIsAlertOpen] = useState(false)
-	const { setIsSheetOpen, setEditingInvoiceId } = useContext(SheetContext)
 
 	return (
 		<>
