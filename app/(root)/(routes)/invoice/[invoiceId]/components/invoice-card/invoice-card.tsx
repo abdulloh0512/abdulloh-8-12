@@ -86,7 +86,7 @@ export const InvoiceCard: React.FC<InvoiceCardProps> = ({ data }) => {
 			</div>
 			<div>
 				<InvoiceCardTable data={data.data} />
-				<div className='bg-black w-full flex flex-row justify-between items-center gap-2 p-6 rounded-b-lg sm:p-8'>
+				<div className='bg-background w-full flex flex-row justify-between items-center gap-2 p-6 rounded-b-lg sm:p-8'>
 					<p className='font-normal text-secondary text-sm'>Amount Due</p>
 					<p className='font-bold text-2xl'>Є {calculateTotal(data).toFixed(2)}</p>
 				</div>

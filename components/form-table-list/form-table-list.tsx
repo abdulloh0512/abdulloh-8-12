@@ -56,7 +56,7 @@ export const FormTableList: React.FC<FormTableListProps> = ({ tableData, setTabl
 			<Button
 				variant='secondary'
 				type='button'
-				className='rounded-full w-full'
+				className='rounded-full w-full mt-2'
 				aria-label='Add new item to a list'
 				onClick={handleAddRow}>
 				+ Add New Item

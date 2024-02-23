@@ -303,12 +303,12 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ handleSheet }) => {
 							variant='secondary'
 							type='button'
 							onClick={() => onSubmit(form.getValues(), 'draft')}>
-							<span className='hidden sm:block'>Save as</span> Draft
+							<span className='hidden sm:block pr-1'>Save as</span> Draft
 						</Button>
 						<Button
 							type='button'
 							onClick={() => onSubmit(form.getValues(), 'pending')}>
-							<span className='hidden sm:block'>Save &</span> Send
+							<span className='hidden sm:block pr-1'>Save &</span> Send
 						</Button>
 					</div>
 				</div>

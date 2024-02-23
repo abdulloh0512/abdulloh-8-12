@@ -31,7 +31,7 @@ export const InvoiceListItem: React.FC<InvoiceListItemProps> = ({ id, date, name
 						{id.slice(0, 6)}
 					</p>
 					<p className='font-normal text-secondary text-sm'>{formattedDate(date as Timestamp)}</p>
-					<p className='font-normal text-primary text-sm'>{name}</p>
+					<p className='font-normal text-secondary text-sm'>{name}</p>
 				</div>
 
 				<div className='hidden flex-row items-center sm:flex'>

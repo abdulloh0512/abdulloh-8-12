@@ -34,21 +34,21 @@ export const FormTableBodyRow: React.FC<FormTableBodyRowProps> = ({ data, onChan
 
 	return (
 		<TableRow>
-			<TableCell className='px-2 w-full'>
+			<TableCell className='px-2 min-w-48'>
 				<FormTableListInput
 					type='text'
 					onChange={handleItemNameChange}
 					value={data.itemName}
 				/>
 			</TableCell>
-			<TableCell className='px-2 min-w-20'>
+			<TableCell className='px-2 min-w-14 max-w-20'>
 				<FormTableListInput
 					type='number'
 					onChange={handleQtyChange}
 					value={data.qty}
 				/>
 			</TableCell>
-			<TableCell className='px-2 min-w-28'>
+			<TableCell className='px-2 min-w-20 max-w-28'>
 				<FormTableListInput
 					type='number'
 					onChange={handlePriceChange}
