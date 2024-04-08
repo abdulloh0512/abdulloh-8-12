@@ -15,8 +15,8 @@ import { SheetProvider } from '@/context/sheet-context'
 import { AuthProvider } from '@/context/auth-context'
 
 export const metadata: Metadata = {
-	title: 'Frontend Mentor Invoice App',
-	description: 'Frontend Mentor Invoice App',
+	title: 'Invoice App',
+	description: 'Invoice App',
 }
 
 export default async function RootLayout({

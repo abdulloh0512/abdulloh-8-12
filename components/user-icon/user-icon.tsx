@@ -6,7 +6,7 @@ export const UserIcon = () => {
   return (
     <Link href="/profile">
       <Avatar>
-        <AvatarImage src="https://github.com/shadcn.png" />
+        <AvatarImage src="/Oval.svg" />
         <AvatarFallback>PG</AvatarFallback>
       </Avatar>
     </Link>
