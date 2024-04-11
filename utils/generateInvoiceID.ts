@@ -16,3 +16,4 @@ export function generateInvoiceID() {
   const uniqueID = randomLetters.join("") + randomNumbers.join("") + uuidv4();
   return uniqueID;
 }
+
