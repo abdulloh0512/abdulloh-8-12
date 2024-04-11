@@ -18,3 +18,4 @@ export default async function getAllInvoices(userId: string) {
 
 	return { result, error }
 }
+

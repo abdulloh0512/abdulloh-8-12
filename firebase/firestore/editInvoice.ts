@@ -21,3 +21,4 @@ export default async function editInvoice(data: InvoiceType) {
 
 	return { result, error }
 }
+

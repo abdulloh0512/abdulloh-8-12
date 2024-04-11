@@ -15,3 +15,4 @@ let firebase_app = getApps().length === 0 ? initializeApp(firebaseConfig) : getA
 const auth = getAuth()
 
 export { firebase_app, auth }
+

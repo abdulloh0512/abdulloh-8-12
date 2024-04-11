@@ -17,3 +17,4 @@ export default async function getUserInfo(id: string) {
 
 	return { result, error }
 }
+

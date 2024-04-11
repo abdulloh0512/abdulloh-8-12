@@ -19,3 +19,4 @@ export default async function markInvoiceAsPaid(id: string) {
 
 	return { result, error }
 }
+
