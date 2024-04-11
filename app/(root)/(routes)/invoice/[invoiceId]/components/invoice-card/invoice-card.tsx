@@ -94,3 +94,4 @@ export const InvoiceCard: React.FC<InvoiceCardProps> = ({ data }) => {
 		</div>
 	)
 }
+

@@ -34,3 +34,4 @@ export const InvoicesList: React.FC<InvoicesListProps> = ({ invoices, status, se
 		</ul>
 	)
 }
+

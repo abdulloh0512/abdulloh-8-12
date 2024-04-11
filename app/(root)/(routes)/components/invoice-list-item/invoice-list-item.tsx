@@ -61,3 +61,4 @@ export const InvoiceListItem: React.FC<InvoiceListItemProps> = ({ id, date, name
 		</li>
 	)
 }
+

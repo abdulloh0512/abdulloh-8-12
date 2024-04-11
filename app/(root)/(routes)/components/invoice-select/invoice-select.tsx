@@ -26,3 +26,4 @@ export const InvoiceSelect: React.FC<InvoiceSelectProps> = ({ onSelect }) => {
 		</Select>
 	)
 }
+

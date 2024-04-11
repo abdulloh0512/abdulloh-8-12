@@ -59,3 +59,4 @@ export const DeleteAlert: React.FC<DeleteAlertProps> = ({ isAlertOpen, setIsAler
 		</AlertDialog>
 	)
 }
+

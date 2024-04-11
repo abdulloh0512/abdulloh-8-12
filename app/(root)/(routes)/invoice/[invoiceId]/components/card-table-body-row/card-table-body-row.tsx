@@ -22,3 +22,4 @@ export const CardTableBodyRow: React.FC<CardTableBodyRowProps> = ({ data }) => {
 		</TableRow>
 	)
 }
+

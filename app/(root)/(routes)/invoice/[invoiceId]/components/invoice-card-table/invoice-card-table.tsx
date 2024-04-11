@@ -31,3 +31,4 @@ export const InvoiceCardTable: React.FC<InvoiceCardTableProps> = ({ data }) => {
 		</>
 	)
 }
+

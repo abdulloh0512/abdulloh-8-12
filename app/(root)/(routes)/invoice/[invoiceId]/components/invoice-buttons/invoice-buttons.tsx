@@ -59,3 +59,4 @@ export const InvoiceButtons: React.FC<InvoiceButtonsProps> = ({
 		</div>
 	)
 }
+

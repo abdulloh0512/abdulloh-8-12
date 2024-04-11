@@ -70,3 +70,4 @@ export default function Invoice({ params }: { params: { invoiceId: string } }) {
 		</>
 	)
 }
+
