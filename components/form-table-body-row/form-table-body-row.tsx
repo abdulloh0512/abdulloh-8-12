@@ -68,3 +68,4 @@ export const FormTableBodyRow: React.FC<FormTableBodyRowProps> = ({ data, onChan
 		</TableRow>
 	)
 }
+

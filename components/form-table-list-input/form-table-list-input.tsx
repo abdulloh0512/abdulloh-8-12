@@ -18,3 +18,4 @@ export const FormTableListInput: React.FC<FormTableListInput> = ({ type, onChang
 		/>
 	)
 }
+

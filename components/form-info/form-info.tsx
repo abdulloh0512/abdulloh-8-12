@@ -13,3 +13,4 @@ export const FormInfo: React.FC<FormInfoProps> = ({ heading, text }) => {
     </div>
   );
 };
+

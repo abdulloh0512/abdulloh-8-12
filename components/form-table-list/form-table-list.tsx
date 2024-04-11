@@ -64,3 +64,4 @@ export const FormTableList: React.FC<FormTableListProps> = ({ tableData, setTabl
 		</>
 	)
 }
+

@@ -22,3 +22,4 @@ export const InvoiceItemBadge: React.FC<InvoiceItemBadgeProps> = ({ status }) =>
 		</Badge>
 	)
 }
+

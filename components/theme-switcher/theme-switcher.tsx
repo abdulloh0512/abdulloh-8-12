@@ -31,3 +31,4 @@ export const ThemeSwitcher = () => {
 		</Button>
 	)
 }
+

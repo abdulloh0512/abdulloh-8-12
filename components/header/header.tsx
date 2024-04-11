@@ -12,3 +12,4 @@ export const Header: React.FC<HeaderProps> = ({ children, className }) => {
 		</header>
 	)
 }
+
