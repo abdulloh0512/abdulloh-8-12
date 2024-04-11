@@ -14,3 +14,4 @@ export default async function signUp(email: string, password: string) {
 
 	return { result, error }
 }
+

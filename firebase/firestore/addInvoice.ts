@@ -19,3 +19,4 @@ export default async function addInvoice(data: InvoiceType) {
 
 	return { result, error }
 }
+

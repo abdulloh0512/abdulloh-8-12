@@ -15,3 +15,4 @@ export default async function deleteInvoice(id: string) {
 
 	return { result, error }
 }
+

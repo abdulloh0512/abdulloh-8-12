@@ -19,3 +19,4 @@ export default async function addUserInfo(id: string, data: UserDataType) {
 
 	return { result, error }
 }
+
